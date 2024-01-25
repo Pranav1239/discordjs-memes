@@ -13,6 +13,8 @@ const client = new Client({
   ],
 });
 
+const Token = process.env.TOKEN;
+
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
@@ -39,10 +41,8 @@ client.on("interactionCreate", async (interaction) => {
   if (interaction.commandName === "meme") {
     try {
       const response = await axios.get("https://meme-api.com/gimme");
-      const apiData = response;
-      const MemeImage = new AttachmentBuilder().addFile(`${apiData.data.url}`);
-      console.log(MemeImage);
-      interaction.reply({ files: [MemeImage] });
+      const memeUrl = response;
+      interaction.reply({ files: [memeUrl.data.url] });
     } catch (error) {
       console.error("Error making API call:", error);
       interaction.reply("Failed to fetch data from the API.");
@@ -72,4 +72,4 @@ client.on("interactionCreate", async (interaction) => {
   }
 });
 
-client.login(process.env.TOKEN);
+client.login(`${Token}`);
